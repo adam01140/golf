@@ -36,6 +36,15 @@ class Play extends Phaser.Scene {
     this.ball.body.setBounce(0.5)
     this.ball.body.setDamping(true).setDrag(0.5)
 
+
+    this.movingWall = this.physics.add.sprite(width / 2, height / 3, 'wall');
+    this.movingWall.body.setImmovable(true);
+    this.movingWall.body.setVelocityX(this.SHOT_VELOCITY_X); // Start moving to the right
+    this.movingWall.body.setCollideWorldBounds(true); // Make it collide with world bounds
+    this.movingWall.body.setBounce(1, 0); // Make it bounce when it hits world bounds (perfectly elastic collision)
+    
+
+
     // add walls
 let wallA = this.physics.add.sprite(0, height / 4, 'wall');
 wallA.setX(Phaser.Math.Between(0 + wallA.width/2, width - wallA.width/2));
@@ -86,6 +95,7 @@ this.physics.add.collider(this.ball, this.walls);
 // ball/one-way collision
 this.physics.add.collider(this.ball, this.oneWay);
 
+this.physics.add.collider(this.ball, this.movingWall);
 
     }
 
