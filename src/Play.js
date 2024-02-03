@@ -54,18 +54,27 @@ this.oneWay.body.setImmovable(true);
 this.oneWay.body.checkCollision.down = false;
 
 
-        // add pointer input
+
+
 this.input.on('pointerdown', (pointer) => {
-    let shotDirection = pointer.y <= this.ball.y ? 1 : -1;
-    this.ball.body.setVelocityX(Phaser.Math.Between(-this.SHOT_VELOCITY_X, this.SHOT_VELOCITY_X));
-    this.ball.body.setVelocityY(Phaser.Math.Between(this.SHOT_VELOCITY_Y_MIN, this.SHOT_VELOCITY_Y_MAX) * shotDirection);
+    // Calculate the x and y shot direction based on pointer position
+    let shotDirectionX = pointer.x - this.ball.x;
+    let shotDirectionY = pointer.y <= this.ball.y ? -1 : 1; // Y direction as before
+
+    // Normalize the shot direction for X
+    let shotMagnitude = Math.sqrt(shotDirectionX * shotDirectionX);
+    shotDirectionX /= shotMagnitude;
+
+    // Use the shot direction for X to set the ball's velocity
+    this.ball.body.setVelocityX(shotDirectionX * this.SHOT_VELOCITY_X);
+    this.ball.body.setVelocityY(Phaser.Math.Between(this.SHOT_VELOCITY_Y_MIN, this.SHOT_VELOCITY_Y_MAX) * shotDirectionY);
 })
 
 
 // cup/ball collision
 this.physics.add.collider(this.ball, this.cup, (ball, cup) => {
     //ball.destroy()
-    alert("hey");
+    //alert("hey");
     this.resetBall(); 
 })
 
